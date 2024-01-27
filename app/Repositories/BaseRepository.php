@@ -26,16 +26,16 @@ interface BaseRepository
 
     /**
      * Update
-     * @param $id
+     * @param string $uuid
      * @param array $attributes
-     * @return mixed
+     * @return $model
      */
-    public function update($id, array $attributes);
+    public function update($uuid, array $attributes);
 
     /**
      * Delete
-     * @param $id
+     * @param $uuid
      * @return mixed
      */
-    public function delete($id);
+    public function delete($uuid);
 }

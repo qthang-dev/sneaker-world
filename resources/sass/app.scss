@@ -1,14 +1,19 @@
+nav {
+  background: #000;
 
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
+  span, a {
+    color: #fff;
+  }
+}
 
-// Variables
-@import 'variables';
+.navbar-brand {
+  font-weight: bold;
+}
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
+#left-menu {
+  padding-left: 0;
 
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  .list-group-item {
+    border-radius: 0;
+  }
 }

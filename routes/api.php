@@ -1,5 +1,7 @@
 <?php
 
+include_once 'role.php';
+
 use Illuminate\Http\Request;
 
 /*

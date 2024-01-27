@@ -3,6 +3,8 @@
 namespace App\Repositories\Eloquent;
 
 use App\Repositories\BaseRepository;
+use Illuminate\Support\Facades\Log;
+use DB;
 
 abstract class EloquentBaseRepository implements BaseRepository
 {
@@ -47,38 +49,52 @@ abstract class EloquentBaseRepository implements BaseRepository
      */
     public function create(array $attributes)
     {
-        return $this->model->create($attributes);
+        DB::beginTransaction();
+        try {
+            $item = $this->model->create($attributes);
+            DB::commit();
+            return $item;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Create item fail: ' . $e->getMessage());
+            return null;
+        }
     }
 
     /**
      * Update
-     * @param $id
+     * @param $uuid
      * @param array $attributes
-     * @return bool|mixed
+     * @return $model
      */
-    public function update($id, array $attributes)
+    public function update($uuid, array $attributes)
     {
-        $item = $this->model->find($id);
-
-        if ($item) {
+        DB::beginTransaction();
+        try {
+            $item = $this->model->where('uuid', $uuid)->first();
+            if (!$item) {
+                return false;
+            }
             $item->update($attributes);
+            DB::commit();
             return $item;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Update item fail: ' . $e->getMessage());
+            return null;
         }
-
-        return false;
     }
 
     /**
      * Delete
-     *
-     * @param $id
+     * @param $uuid
      * @return bool
      */
-    public function delete($id)
+    public function delete($uuid)
     {
-        $item = $this->model->find($id);
+        $item = $this->model->where('uuid', $uuid)->first();
 
-        if ($result) {
+        if ($item) {
             $item->delete();
 
             return true;
